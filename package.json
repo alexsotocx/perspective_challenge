@@ -6,6 +6,7 @@
   "scripts": {
     "dev:start": "nodemon src/bin/api.ts",
     "start": "node dist/src/bin/api.js",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "test": "set DEBUG=* && jest --testPathPattern=test --coverage"
   },
   "author": "Christoph Fey",
