@@ -4,7 +4,8 @@
   "description": "Basic setup to for the backend engineer test",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "dev:start": "nodemon src/bin/api.ts",
+    "start": "node dist/src/bin/api.js",
     "test": "set DEBUG=* && jest --testPathPattern=test --coverage"
   },
   "author": "Christoph Fey",
