@@ -91,7 +91,7 @@ describe("UserHandler", () => {
         });
 
         expect(mockRepo.getAllUsersPaginated).toBeCalledWith(<IUserGetParams>{
-          orderBy: [{ direction: "ASC", key: "created_at" }],
+          orderBy: [{ direction: "ASC", key: "createdAt" }],
           pagination: { limit: 10, page: 1 }
         });
       });

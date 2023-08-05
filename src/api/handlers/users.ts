@@ -13,14 +13,15 @@ export class UserHandler {
   async saveUser(payload: IUserCreatePayload): Promise<IUser> {
 
     const res = await this.repository.getAllUsersPaginated({
-      email: [payload.email]
+      email: [payload.email],
+      pagination: {limit: 1, page: 1},
     });
 
     if (res.totalItems > 0) throw new UserAlreadyExistException(payload.email);
 
     return this.repository.save({
       email: payload.email,
-      created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       firstName: payload.firstName,
       lastName: payload.lastName,
       id: randomUUID()
@@ -32,9 +33,9 @@ export class UserHandler {
     const order: IUserGetParams["orderBy"] = [];
 
     if (payload.created) {
-      order.push({ key: "created_at", direction: "ASC" });
+      order.push({ key: "createdAt", direction: "asc" });
     } else {
-      order.push({ key: "lastName", direction: "ASC" });
+      order.push({ key: "lastName", direction: "asc" });
     }
 
     const res = await this.repository.getAllUsersPaginated({

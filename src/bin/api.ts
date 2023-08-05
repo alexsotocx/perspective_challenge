@@ -7,7 +7,8 @@ async function startApi(): Promise<void> {
   const config: IConfig = {
     http: {
       port: parseInt(process.env.PORT) || 9000,
-    }
+    },
+    mongoDbURI: process.env.MONGO_DB_URL,
   }
   const api = new Api(config);
 

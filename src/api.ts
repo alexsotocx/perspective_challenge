@@ -3,6 +3,7 @@ import cors from "cors";
 import { IConfig } from "./types/config";
 import { createUsersRoute } from "./api/routes/users";
 import { MongoUsersRepository } from "./repositories/users";
+import * as mongoose from "mongoose";
 
 
 export class Api {
@@ -12,11 +13,15 @@ export class Api {
   async start(): Promise<void> {
     const app = express();
 
+    const connection = await mongoose.connect(this.config.mongoDbURI, {
+    });
+
+
     app.use(cors())
       .use(express.json())
       .options("*", cors());
 
-    const usersRepository = new MongoUsersRepository();
+    const usersRepository = new MongoUsersRepository(connection);
 
     app.use(createUsersRoute(usersRepository));
 

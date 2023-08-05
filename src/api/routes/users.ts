@@ -19,9 +19,10 @@ export function createUsersRoute(userRepo: IUserRepository): Router {
 
   router.get('/', safeJSONResponse(async(req) => {
     const routePayload: IGetAllUserPayload = await validatePayload({
-      created: !!req.query.created,
+      created: req.query.created !== undefined,
       pagination: { limit: req.query.limit, page: req.query.page },
     }, getAllUsersSchema);
+
 
     return userHandler.getAllUsers(routePayload);
   }, 200));

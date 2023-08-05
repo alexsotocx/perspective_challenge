@@ -3,7 +3,7 @@ import { IUser } from "./models";
 export interface IUserGetParams {
   email?: string[];
   id?: string[];
-  orderBy?: {key: keyof IUser, direction: 'ASC' | 'DESC'}[],
+  orderBy?: {key: keyof IUser, direction: 'asc' | 'desc'}[],
   pagination?: { limit: number, page: number};
 }
 
