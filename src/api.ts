@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { IConfig } from "./types/config";
 import { createUsersRoute } from "./api/routes/users";
+import { MongoUsersRepository } from "./repositories/users";
 
 
 export class Api {
@@ -15,7 +16,9 @@ export class Api {
       .use(express.json())
       .options("*", cors());
 
-    app.use(createUsersRoute());
+    const usersRepository = new MongoUsersRepository();
+
+    app.use(createUsersRoute(usersRepository));
 
     app.listen(this.config.http.port, () => {
       console.log(`[server]: Server is running at http://localhost:${this.config.http.port}`);

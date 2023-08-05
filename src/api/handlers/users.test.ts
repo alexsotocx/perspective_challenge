@@ -32,19 +32,6 @@ describe("UserHandler", () => {
       });
     });
 
-    describe("with a wrong validation", () => {
-      test("does not save the user", async () => {
-        await expect(handler.saveUser({
-          lastName: "",
-          firstName: 123,
-          email: "not an valid email",
-          other: true
-        } as never)).rejects.toThrow(ValidationError);
-
-        expect(mockRepo.save).not.toBeCalled();
-      });
-    });
-
     describe("when user already exists", () => {
       test("does not save the user", async () => {
         mockRepo.getAllUsersPaginated.mockResolvedValue(
@@ -70,7 +57,7 @@ describe("UserHandler", () => {
         pages: 1
       });
 
-      expect(await handler.getAllUsers({})).toEqual({
+      expect(await handler.getAllUsers({ pagination: { limit: 10, page: 1 } })).toEqual({
         users: [userFixture],
         page: 1,
         limit: 10,
@@ -92,7 +79,10 @@ describe("UserHandler", () => {
           pages: 1
         });
 
-        expect(await handler.getAllUsers({ created: true })).toEqual({
+        expect(await handler.getAllUsers({
+          created: true,
+          pagination: { limit: 10, page: 1 }
+        })).toEqual({
           users: [userFixture],
           page: 1,
           limit: 10,

@@ -1,55 +1,51 @@
 import { IUserGetParams, IUserRepository } from "../../types/components";
 import { IUser } from "../../types/models";
-import { IUserCreatePayload, userCreatePayload } from "../dto/requests/user-create";
+import { IUserCreatePayload } from "../dto/requests/user-create";
 import { randomUUID } from "crypto";
-import { validatePayload } from "../../util/vaidation";
 import { UserAlreadyExistException } from "../../exceptions";
-import { getAllUsersSchema, IGetAllUserPayload } from "../dto/requests/get-all-users";
+import { IGetAllUserPayload } from "../dto/requests/get-all-users";
 import { IGetAllUsersResponse } from "../dto/responses/get-all-users";
 
 export class UserHandler {
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async saveUser(dirtyPayload: IUserCreatePayload): Promise<IUser> {
-    const validPayload = await validatePayload(dirtyPayload, userCreatePayload);
+  async saveUser(payload: IUserCreatePayload): Promise<IUser> {
 
     const res = await this.repository.getAllUsersPaginated({
-      email: [validPayload.email]
+      email: [payload.email]
     });
 
-    if (res.totalItems > 0) throw new UserAlreadyExistException(validPayload.email);
+    if (res.totalItems > 0) throw new UserAlreadyExistException(payload.email);
 
     return this.repository.save({
-      email: validPayload.email,
+      email: payload.email,
       created_at: new Date().toISOString(),
-      firstName: validPayload.firstName,
-      lastName: validPayload.lastName,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
       id: randomUUID()
     });
   }
 
 
-  async getAllUsers(param: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
-    const defaultPayload = await validatePayload(param, getAllUsersSchema);
-
+  async getAllUsers(payload: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
     const order: IUserGetParams["orderBy"] = [];
 
-    if (param.created) {
+    if (payload.created) {
       order.push({ key: "created_at", direction: "ASC" });
     } else {
       order.push({ key: "lastName", direction: "ASC" });
     }
 
     const res = await this.repository.getAllUsersPaginated({
-      pagination: defaultPayload.pagination,
+      pagination: payload.pagination,
       orderBy: order
     });
 
     return {
       users: res.users,
-      page: defaultPayload.pagination.page,
-      limit: defaultPayload.pagination.limit,
+      page: payload.pagination.page,
+      limit: payload.pagination.limit,
       totalPages: res.pages,
       totalItems: res.totalItems
     };

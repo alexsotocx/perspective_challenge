@@ -2,7 +2,7 @@ import Joi from "joi";
 
 export interface IGetAllUserPayload {
   created?: boolean;
-  pagination?: { limit: number, page: number },
+  pagination: { limit: number, page: number },
 }
 
 export const getAllUsersSchema = Joi.object<IGetAllUserPayload>({
