@@ -2,8 +2,6 @@ import * as dotenv from "dotenv";
 import { Api } from "../api";
 import { IConfig } from "../types/config";
 
-
-
 async function startApi(): Promise<void> {
   dotenv.config();
   const config: IConfig = {
