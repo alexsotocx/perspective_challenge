@@ -2,7 +2,7 @@ import { UserHandler } from "./users";
 import { mockUserRepository } from "../../../test/mocks";
 import { userFixture, uuidRegex } from "../../../test/fixtures";
 import { UserAlreadyExistException, ValidationError } from "../../exceptions";
-
+import { IUserGetParams } from "../../types/components";
 
 
 describe("UserHandler", () => {
@@ -56,6 +56,32 @@ describe("UserHandler", () => {
         })).rejects.toThrow(UserAlreadyExistException);
 
         expect(mockRepo.save).not.toBeCalled();
+      });
+    });
+  });
+
+  describe("getAllUsers", () => {
+    test("returns all the user in the db paginated", async () => {
+      mockRepo.getAllUsers.mockResolvedValue([userFixture]);
+
+      expect(await handler.getAllUsers({})).toEqual([userFixture]);
+
+      expect(mockRepo.getAllUsers).toBeCalledWith(<IUserGetParams>{
+        order_by: [{ direction: "ASC", key: "lastName" }],
+        pagination: { limit: 10, page: 1 }
+      });
+    });
+
+    describe("when created flag is passed", () => {
+      test("reorders the output with created at", async () => {
+        mockRepo.getAllUsers.mockResolvedValue([userFixture]);
+
+        expect(await handler.getAllUsers({ created: true })).toEqual([userFixture]);
+
+        expect(mockRepo.getAllUsers).toBeCalledWith(<IUserGetParams>{
+          order_by: [{ direction: "ASC", key: "created_at" }],
+          pagination: { limit: 10, page: 1 }
+        });
       });
     });
   });
