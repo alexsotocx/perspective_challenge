@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { IConfig } from "./types/config";
-import { createUsersRoute } from "./api/handlers/users";
+import { createUsersRoute } from "./api/routes/users";
 
 
 export class Api {

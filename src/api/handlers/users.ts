@@ -1,15 +1,19 @@
-import { Request, Response, Router } from "express";
+import { IUserRepository } from "../../types/components";
+import { IUser } from "../../types/models";
+import { IUserCreatePayload } from "../dto/requests/user-create";
+import { randomUUID } from "crypto";
 
-export function createUsersRoute(): Router {
-  const router = Router();
+export class UserHandler {
+  constructor(private readonly repository: IUserRepository) {
+  }
 
-  router.post('/', (req: Request, res: Response) => {
-    res.send({}).status(201);
-  });
-
-  router.get('/', (req: Request, res: Response) => {
-    res.send([]).status(200);
-  });
-
-  return Router().use('/v1/users', router);
+  async saveUser(dirtyPayload: IUserCreatePayload): Promise<IUser> {
+    return this.repository.save({
+      email: dirtyPayload.email,
+      created_at: new Date().toISOString(),
+      firstName: dirtyPayload.firstName,
+      lastName: dirtyPayload.lastName,
+      id: randomUUID(),
+    })
+  }
 }
