@@ -28,7 +28,7 @@ describe("UserHandler", () => {
         firstName: userFixture.firstName,
         email: userFixture.email,
         id: expect.stringMatching(uuidRegex),
-        created_at: expect.anything()
+        createdAt: expect.anything()
       });
     });
 
@@ -66,7 +66,7 @@ describe("UserHandler", () => {
       });
 
       expect(mockRepo.getAllUsersPaginated).toBeCalledWith(<IUserGetParams>{
-        orderBy: [{ direction: "ASC", key: "lastName" }],
+        orderBy: [{ direction: "asc", key: "lastName" }],
         pagination: { limit: 10, page: 1 }
       });
     });
@@ -91,8 +91,8 @@ describe("UserHandler", () => {
         });
 
         expect(mockRepo.getAllUsersPaginated).toBeCalledWith(<IUserGetParams>{
-          orderBy: [{ direction: "ASC", key: "createdAt" }],
-          pagination: { limit: 10, page: 1 }
+          orderBy: [{ direction: "asc", key: "createdAt" }],
+          pagination: { limit: 10, page: 1 },
         });
       });
     });
