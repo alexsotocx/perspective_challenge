@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 
-export function createUsersRoute(): Router {
+export function createUsersRoute(user): Router {
   const router = Router();
 
   router.post('/', (req: Request, res: Response) => {

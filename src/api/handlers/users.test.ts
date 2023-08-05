@@ -15,7 +15,7 @@ describe("UserHandler", () => {
   describe("saveUser", () => {
     test("saves the user in the repository", async () => {
       mockRepo.save.mockResolvedValue(userFixture);
-      mockRepo.getAllUsers.mockResolvedValue([]);
+      mockRepo.getAllUsersPaginated.mockResolvedValue({ users: [], totalItems: 0, pages: 0 });
 
       await handler.saveUser({
         lastName: userFixture.lastName,
@@ -47,7 +47,9 @@ describe("UserHandler", () => {
 
     describe("when user already exists", () => {
       test("does not save the user", async () => {
-        mockRepo.getAllUsers.mockResolvedValue([userFixture]);
+        mockRepo.getAllUsersPaginated.mockResolvedValue(
+          { users: [userFixture], totalItems: 1, pages: 1 }
+        );
 
         await expect(handler.saveUser({
           lastName: userFixture.lastName,
@@ -62,24 +64,44 @@ describe("UserHandler", () => {
 
   describe("getAllUsers", () => {
     test("returns all the user in the db paginated", async () => {
-      mockRepo.getAllUsers.mockResolvedValue([userFixture]);
+      mockRepo.getAllUsersPaginated.mockResolvedValue({
+        users: [userFixture],
+        totalItems: 1,
+        pages: 1
+      });
 
-      expect(await handler.getAllUsers({})).toEqual([userFixture]);
+      expect(await handler.getAllUsers({})).toEqual({
+        users: [userFixture],
+        page: 1,
+        limit: 10,
+        totalPages: 1,
+        totalItems: 1
+      });
 
-      expect(mockRepo.getAllUsers).toBeCalledWith(<IUserGetParams>{
-        order_by: [{ direction: "ASC", key: "lastName" }],
+      expect(mockRepo.getAllUsersPaginated).toBeCalledWith(<IUserGetParams>{
+        orderBy: [{ direction: "ASC", key: "lastName" }],
         pagination: { limit: 10, page: 1 }
       });
     });
 
     describe("when created flag is passed", () => {
       test("reorders the output with created at", async () => {
-        mockRepo.getAllUsers.mockResolvedValue([userFixture]);
+        mockRepo.getAllUsersPaginated.mockResolvedValue({
+          users: [userFixture],
+          totalItems: 1,
+          pages: 1
+        });
 
-        expect(await handler.getAllUsers({ created: true })).toEqual([userFixture]);
+        expect(await handler.getAllUsers({ created: true })).toEqual({
+          users: [userFixture],
+          page: 1,
+          limit: 10,
+          totalPages: 1,
+          totalItems: 1
+        });
 
-        expect(mockRepo.getAllUsers).toBeCalledWith(<IUserGetParams>{
-          order_by: [{ direction: "ASC", key: "created_at" }],
+        expect(mockRepo.getAllUsersPaginated).toBeCalledWith(<IUserGetParams>{
+          orderBy: [{ direction: "ASC", key: "created_at" }],
           pagination: { limit: 10, page: 1 }
         });
       });

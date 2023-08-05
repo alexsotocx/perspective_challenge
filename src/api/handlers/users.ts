@@ -5,6 +5,7 @@ import { randomUUID } from "crypto";
 import { validatePayload } from "../../util/vaidation";
 import { UserAlreadyExistException } from "../../exceptions";
 import { getAllUsersSchema, IGetAllUserPayload } from "../dto/requests/get-all-users";
+import { IGetAllUsersResponse } from "../dto/responses/get-all-users";
 
 export class UserHandler {
   constructor(private readonly repository: IUserRepository) {
@@ -13,11 +14,11 @@ export class UserHandler {
   async saveUser(dirtyPayload: IUserCreatePayload): Promise<IUser> {
     const validPayload = await validatePayload(dirtyPayload, userCreatePayload);
 
-    const [existingUser] = await this.repository.getAllUsers({
+    const res = await this.repository.getAllUsersPaginated({
       email: [validPayload.email]
     });
 
-    if (existingUser) throw new UserAlreadyExistException(validPayload.email);
+    if (res.totalItems > 0) throw new UserAlreadyExistException(validPayload.email);
 
     return this.repository.save({
       email: validPayload.email,
@@ -29,10 +30,10 @@ export class UserHandler {
   }
 
 
-  async getAllUsers(param: IGetAllUserPayload) {
+  async getAllUsers(param: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
     const defaultPayload = await validatePayload(param, getAllUsersSchema);
 
-    const order: IUserGetParams["order_by"] = [];
+    const order: IUserGetParams["orderBy"] = [];
 
     if (param.created) {
       order.push({ key: "created_at", direction: "ASC" });
@@ -40,9 +41,17 @@ export class UserHandler {
       order.push({ key: "lastName", direction: "ASC" });
     }
 
-    return this.repository.getAllUsers({
+    const res = await this.repository.getAllUsersPaginated({
       pagination: defaultPayload.pagination,
-      order_by: order
+      orderBy: order
     });
+
+    return {
+      users: res.users,
+      page: defaultPayload.pagination.page,
+      limit: defaultPayload.pagination.limit,
+      totalPages: res.pages,
+      totalItems: res.totalItems
+    };
   }
 }
