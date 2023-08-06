@@ -6,7 +6,7 @@ import { IGetAllUserPayload } from '../dto/requests/get-all-users';
 import { IGetAllUsersResponse } from '../dto/responses/get-all-users';
 import { IUserResponse } from '../dto/responses/user';
 import { userSerializer } from '../dto/serializers/user';
-import { logger } from "../../util/logger";
+import { logger } from '../../util/logger';
 
 export class UserHandler {
     constructor(private readonly repository: IUserRepository) {}
@@ -20,22 +20,20 @@ export class UserHandler {
         if (res.totalItems > 0) throw new UserAlreadyExistException(payload.email);
 
         const newUser = {
-          email: payload.email,
-          createdAt: new Date(),
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          id: randomUUID(),
+            email: payload.email,
+            createdAt: new Date(),
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            id: randomUUID(),
         };
 
         logger.debug('Saving into db', { newUser });
 
-        return this.repository
-            .save(newUser)
-            .then(userSerializer);
+        return this.repository.save(newUser).then(userSerializer);
     }
 
     async getAllUsers(payload: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
-      logger.debug('Getting all users with', { payload });
+        logger.debug('Getting all users with', { payload });
         const order: IUserGetParams['orderBy'] = [];
 
         if (payload.created) {

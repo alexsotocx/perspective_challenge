@@ -3,7 +3,7 @@ const loadedEnv = dotenv.config();
 
 import { Api } from '../api';
 import { IConfig } from '../types/config';
-import { logger } from "../util/logger";
+import { logger } from '../util/logger';
 
 async function startApi(): Promise<void> {
     logger.debug('Config', loadedEnv);

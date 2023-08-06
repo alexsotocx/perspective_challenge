@@ -4,7 +4,7 @@ import { IConfig } from './types/config';
 import { createUsersRoute } from './api/routes/users';
 import { MongoUsersRepository } from './repositories/mongodb/users';
 import * as mongoose from 'mongoose';
-import { logger } from "./util/logger";
+import { logger } from './util/logger';
 
 export class Api {
     constructor(private readonly config: IConfig) {}
@@ -16,7 +16,11 @@ export class Api {
             authSource: 'admin',
         });
 
-        logger.info('Connected to mongodb', { connection: connection.connection.host, port: connection.connection.port, db: connection.connection.db.databaseName })
+        logger.info('Connected to mongodb', {
+            connection: connection.connection.host,
+            port: connection.connection.port,
+            db: connection.connection.db.databaseName,
+        });
 
         app.use(cors()).use(express.json()).options('*', cors());
 

@@ -1,6 +1,6 @@
 import { APIException } from '../exceptions';
 import { Handler, Response, Request } from 'express';
-import { logger } from "./logger";
+import { logger } from './logger';
 
 export function handleError(error: Error, res: Response) {
     if (error instanceof APIException) {
