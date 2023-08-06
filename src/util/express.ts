@@ -1,5 +1,6 @@
 import { APIException } from '../exceptions';
 import { Handler, Response, Request } from 'express';
+import { logger } from "./logger";
 
 export function handleError(error: Error, res: Response) {
     if (error instanceof APIException) {
@@ -15,7 +16,7 @@ export function handleError(error: Error, res: Response) {
             message: 'Server error',
         });
     }
-    console.error(error);
+    logger.error(error);
 }
 
 export function safeJSONResponse(cb: (req: Request) => Promise<unknown>, statusCode = 200): Handler {

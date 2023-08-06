@@ -13,6 +13,7 @@ module.exports = {
 		'plugin:import/typescript',
 	],
 	rules: {
-		"quote-props": [1, "as-needed"]
+		"quote-props": [1, "as-needed"],
+    "no-console": ["error"]
 	}
 };
