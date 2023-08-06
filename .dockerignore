@@ -1,0 +1,10 @@
+logs
+build
+test
+node_modules
+config
+docker
+
+Dockerfile
+docker-compose.yml
+docs

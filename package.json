@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev:start": "nodemon src/bin/api.ts",
-    "start": "node dist/src/bin/api.js",
+    "start": "node build/src/bin/api.js",
     "lint": "prettier 'src/**/*.ts' --config .prettierrc.js --write && eslint './**/*.ts' --fix",
-    "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "build": "rm -rf build && tsc --project tsconfig.build.json",
     "test:unit": "set DEBUG=* && jest --testPathPattern=src --coverage",
     "test:e2e": "set DEBUG=* && docker compose up -d mongodb && jest --testPathPattern=test/e2e --coverage"
   },
