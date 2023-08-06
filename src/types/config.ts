@@ -1,4 +1,4 @@
 export interface IConfig {
-  http: { port: number },
-  mongoDbURI: string;
+    http: { port: number };
+    mongoDbURI: string;
 }
