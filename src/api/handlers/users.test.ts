@@ -1,8 +1,11 @@
+import {describe, test, beforeEach } from '@jest/globals';
+
 import { UserHandler } from "./users";
 import { mockUserRepository } from "../../../test/mocks";
 import { userFixture, uuidRegex } from "../../../test/fixtures";
 import { UserAlreadyExistException, ValidationError } from "../../exceptions";
 import { IUserGetParams } from "../../types/components";
+import { userSerializer } from "../dto/serializers/user";
 
 
 describe("UserHandler", () => {
@@ -58,7 +61,7 @@ describe("UserHandler", () => {
       });
 
       expect(await handler.getAllUsers({ pagination: { limit: 10, page: 1 } })).toEqual({
-        users: [userFixture],
+        users: [userSerializer(userFixture)],
         page: 1,
         limit: 10,
         totalPages: 1,
@@ -83,7 +86,7 @@ describe("UserHandler", () => {
           created: true,
           pagination: { limit: 10, page: 1 }
         })).toEqual({
-          users: [userFixture],
+          users: [userSerializer(userFixture)],
           page: 1,
           limit: 10,
           totalPages: 1,

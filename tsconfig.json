@@ -1,26 +1,23 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "esModuleInterop": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "dist",
-    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "target": "ES6",
-    "skipLibCheck": true,
-    "types": [
-      "node",
-      "jest"
-    ]
+    "target": "es2020",
+    "outDir": "build/src",
+    "sourceMap": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "include": [
-    "./src/**/*.ts",
-    "./test/**/*.ts"
+    "*/**/*.ts",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
   ]
 }

@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { IConfig } from "./types/config";
 import { createUsersRoute } from "./api/routes/users";
-import { MongoUsersRepository } from "./repositories/users";
+import { MongoUsersRepository } from "./repositories/mongodb/users";
 import * as mongoose from "mongoose";
 
 
@@ -14,6 +14,7 @@ export class Api {
     const app = express();
 
     const connection = await mongoose.connect(this.config.mongoDbURI, {
+      authSource: 'admin'
     });
 
 
@@ -21,7 +22,7 @@ export class Api {
       .use(express.json())
       .options("*", cors());
 
-    const usersRepository = new MongoUsersRepository(connection);
+    const usersRepository = new MongoUsersRepository(connection, null);
 
     app.use(createUsersRoute(usersRepository));
 

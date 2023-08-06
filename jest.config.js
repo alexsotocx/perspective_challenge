@@ -3,6 +3,5 @@ module.exports = {
     verbose: true,
     preset: 'ts-jest',
     testEnvironment: 'node',
-    silent: false,
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 };

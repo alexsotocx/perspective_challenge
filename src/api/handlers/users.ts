@@ -5,12 +5,14 @@ import { randomUUID } from "crypto";
 import { UserAlreadyExistException } from "../../exceptions";
 import { IGetAllUserPayload } from "../dto/requests/get-all-users";
 import { IGetAllUsersResponse } from "../dto/responses/get-all-users";
+import { IUserResponse } from "../dto/responses/user";
+import { userSerializer } from "../dto/serializers/user";
 
 export class UserHandler {
   constructor(private readonly repository: IUserRepository) {
   }
 
-  async saveUser(payload: IUserCreatePayload): Promise<IUser> {
+  async saveUser(payload: IUserCreatePayload): Promise<IUserResponse> {
 
     const res = await this.repository.getAllUsersPaginated({
       email: [payload.email],
@@ -21,13 +23,12 @@ export class UserHandler {
 
     return this.repository.save({
       email: payload.email,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
       firstName: payload.firstName,
       lastName: payload.lastName,
       id: randomUUID()
-    });
+    }).then(userSerializer);
   }
-
 
   async getAllUsers(payload: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
     const order: IUserGetParams["orderBy"] = [];
@@ -44,7 +45,7 @@ export class UserHandler {
     });
 
     return {
-      users: res.users,
+      users: res.users.map(userSerializer),
       page: payload.pagination.page,
       limit: payload.pagination.limit,
       totalPages: res.pages,

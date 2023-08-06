@@ -1,7 +1,8 @@
 import { IUser } from "../../../types/models";
+import { IUserResponse } from "./user";
 
 export interface IGetAllUsersResponse {
-  users: IUser[];
+  users: IUserResponse[];
   page: number;
   limit: number;
   totalPages: number;
