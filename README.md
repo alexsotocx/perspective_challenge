@@ -25,7 +25,7 @@ Be sure to you have all dependencies and follow the next instructions
 
 ## Endpoints
 
-* `GET /v1/users` return all users, is paginated by default, accept query params `limit`, `page`, `created`
+* `GET /v1/users` return all users, is paginated by default, accept query params `limit`, `page`, `created`, `order` ('asc', 'desc')
 * `POST /v1/users` creates a user, accepts json body
 ```json
 {

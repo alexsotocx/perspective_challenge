@@ -32,7 +32,7 @@ describe('/v1/users', () => {
     afterAll(async () => db.disconnect());
 
     describe('GET /', () => {
-        test('Show all users', async () => {
+        test('Show all users ordered by last name', async () => {
             const u1 = await userRepo.save({
                 email: 'email1@gmail.com',
                 lastName: 'A',
@@ -49,13 +49,13 @@ describe('/v1/users', () => {
                 createdAt: new Date(),
             });
 
-            const response = await httpClient.get('/v1/users');
+            const response = await httpClient.get('/v1/users').query({order: 'desc'});
             expect(response.status).toEqual(200);
             const body: IGetAllUsersResponse = response.body;
 
             expect(body.totalItems).toEqual(2);
-            expect(body.users[0]).toEqual(userSerializer(u1));
-            expect(body.users[1]).toEqual(userSerializer(u2));
+            expect(body.users[0]).toEqual(userSerializer(u2));
+            expect(body.users[1]).toEqual(userSerializer(u1));
         });
 
         describe('with the created flag', () => {

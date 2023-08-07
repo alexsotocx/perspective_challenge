@@ -63,7 +63,7 @@ describe('UserHandler', () => {
                 pages: 1,
             });
 
-            expect(await handler.getAllUsers({ pagination: { limit: 10, page: 1 } })).toEqual({
+            expect(await handler.getAllUsers({ pagination: { limit: 10, page: 1 },  })).toEqual({
                 users: [userSerializer(userFixture)],
                 page: 1,
                 limit: 10,

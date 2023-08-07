@@ -26,6 +26,7 @@ export function createUsersRoute(userRepo: IUserRepository): Router {
             const routePayload: IGetAllUserPayload = await validatePayload(
                 {
                     created: req.query.created !== undefined,
+                    order: req.query.order,
                     pagination: { limit: req.query.limit, page: req.query.page },
                 },
                 getAllUsersSchema,

@@ -35,11 +35,12 @@ export class UserHandler {
     async getAllUsers(payload: IGetAllUserPayload): Promise<IGetAllUsersResponse> {
         logger.debug('Getting all users with', { payload });
         const order: IUserGetParams['orderBy'] = [];
+        const direction: 'asc' | 'desc' = payload.order ?? 'asc';
 
         if (payload.created) {
-            order.push({ key: 'createdAt', direction: 'asc' });
+            order.push({ key: 'createdAt', direction });
         } else {
-            order.push({ key: 'lastName', direction: 'asc' });
+            order.push({ key: 'lastName', direction });
         }
 
         const res = await this.repository.getAllUsersPaginated({
