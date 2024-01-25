@@ -1,0 +1,9 @@
+{
+  "name": "Node.js with MongoDB",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+	"workspaceFolder": "/workspace",
+  "dockerComposeFile": ["docker-compose.yml", "docker-compose.devcontainer.yml"],
+  "service": "app",
+	"forwardPorts": [3000]
+}
+
