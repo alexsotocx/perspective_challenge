@@ -6,6 +6,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace:cached
+      - ~/.config/nvim:/root/.config/nvim:ro
     ports:
       - 3000:3000
     command: /bin/sh -c "while sleep 1000; do :; done"
